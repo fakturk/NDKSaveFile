@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity
     boolean startLogging=false;
     boolean timeStarted=false;
     long startTime=0;
+    int repeatNumber=1;
+
+
 
 
     @Override
@@ -106,15 +109,13 @@ public class MainActivity extends AppCompatActivity
                                 @Override
                                 public void onTick(long millisUntilFinished)
                                 {
-                                    countDownTV.setText("Process Remaining: " + millisUntilFinished / 1000);
+                                    countDownTV.setText("Process "+repeatNumber+" Remaining: " + millisUntilFinished / 1000);
                                 }
 
                                 @Override
                                 public void onFinish()
                                 {
-                                    countDownTV.setText("Process Finished");
-                                    startLogging=false;
-                                    buttonStart.setText("Start");
+
 
                                     try
                                     {
@@ -144,10 +145,25 @@ public class MainActivity extends AppCompatActivity
                                         e.printStackTrace();
                                     }
 
+                                    if(repeatNumber<10)
+                                    {
+                                        repeatNumber++;
+                                        timeStarted=false;
+                                        start();
+                                    }
+                                    else
+                                    {
+
+                                        startLogging=false;
+                                        countDownTV.setText("Process Finished");
+                                        buttonStart.setText("Start");
+                                    }
+
                                 }
 
 
                             }.start();
+
                         }
 
 
@@ -168,16 +184,21 @@ public class MainActivity extends AppCompatActivity
 
     public void writeData(long time, float x, float y, float z)
     {
+        float t = (time-startTime)/1000000000.0f;
+//        System.out.println(time+" "+startTime+" "+t);
 
-        String acc = (time-startTime)/1000000000.0 + " " + x + " " + y + " " + z+"\n";
+        String acc =  String.format("%.02f", t)+ " " + x + " " + y + " " + z+"\n";
 
 //        System.out.println(acc);
         if (startLogging)
         {
-            if (timeStarted=false)
+            if (timeStarted==false)
             {
+//                System.out.println("timeStarted");
                 timeStarted=true;
                 startTime=time;
+                t = (time-startTime)/1000000000.0f;
+                acc =  String.format("%.02f", t)+ " " + x + " " + y + " " + z+"\n";
 
             }
             try
