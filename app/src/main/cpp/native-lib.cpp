@@ -64,8 +64,8 @@ void Java_netlab_fakturk_ndksavefile_MainActivity_sensorValue(JNIEnv* env, jobje
        LOGI("Failed to find class" );
     }
     jmethodID writeData = env->GetMethodID(clazz, "writeData","(JFFF)V");
-    env->CallVoidMethod(thiz, writeData,1,2.0,3.0,4.0);
-    sendData(env, thiz, writeData, 5,6.0,7.0,8.0);
+//    env->CallVoidMethod(thiz, writeData,1,2.0,3.0,4.0);
+//    sendData(env, thiz, writeData, 5,6.0,7.0,8.0);
 
     sensorEventQueue = ASensorManager_createEventQueue(sensorManager, looper, 3, get_sensor_events, sensor_data);
     ASensorEventQueue_enableSensor(sensorEventQueue, accSensor);

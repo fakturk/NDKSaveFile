@@ -1,8 +1,23 @@
 package netlab.fakturk.ndksavefile;
 
-import android.support.v7.app.AppCompatActivity;
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -12,6 +27,25 @@ public class MainActivity extends AppCompatActivity
     {
         System.loadLibrary("native-lib");
     }
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    File sd = Environment.getExternalStorageDirectory();
+    Calendar c = Calendar.getInstance();
+    String path = sd + "/" + "SensorData" + c.getTime() + ".xml";
+    String mDestXmlFilename = path;
+    File myFile = new File(mDestXmlFilename);
+    BufferedOutputStream bos;
+    Button buttonStart;
+    TextView countDownTV;
+    boolean startLogging=false;
+    boolean timeStarted=false;
+    long startTime=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -19,17 +53,145 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        buttonStart = (Button) findViewById(R.id.buttonStart);
+        countDownTV = (TextView) findViewById(R.id.countDownTV);
 
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
+
+        FileOutputStream fOut = null;
+        verifyStoragePermissions(this);
+
+        try
+        {
+            myFile.createNewFile();
+            fOut = new FileOutputStream(myFile);
+            bos = new BufferedOutputStream(fOut);
+
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         sensorValue();
+
+        buttonStart.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (buttonStart.getText().equals("Start"))
+                {
+                    buttonStart.setText("Stop");
+                    new CountDownTimer(5000,1000)
+                    {
+                        @Override
+                        public void onTick(long millisUntilFinished)
+                        {
+                            countDownTV.setText("Seconds Remaining: " + millisUntilFinished / 1000);
+                        }
+
+                        @Override
+                        public void onFinish()
+                        {
+                            countDownTV.setText("Processing");
+                            startLogging=true;
+                            timeStarted=false;
+                            new CountDownTimer(10000,1000)
+                            {
+                                @Override
+                                public void onTick(long millisUntilFinished)
+                                {
+                                    countDownTV.setText("Process Remaining: " + millisUntilFinished / 1000);
+                                }
+
+                                @Override
+                                public void onFinish()
+                                {
+                                    countDownTV.setText("Process Finished");
+                                    startLogging=false;
+                                    buttonStart.setText("Start");
+
+                                    try
+                                    {
+                                        bos.close();
+
+                                    } catch (IOException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+
+                                    c = Calendar.getInstance();
+                                     path = sd + "/" + "SensorData" + c.getTime() + ".xml";
+                                     mDestXmlFilename = path;
+                                     myFile = new File(mDestXmlFilename);
+                                    FileOutputStream fOut = null;
+                                    try
+                                    {
+                                        myFile.createNewFile();
+                                        fOut = new FileOutputStream(myFile);
+                                        bos = new BufferedOutputStream(fOut);
+
+                                    } catch (FileNotFoundException e)
+                                    {
+                                        e.printStackTrace();
+                                    } catch (IOException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+
+
+                            }.start();
+                        }
+
+
+                    }.start();
+
+
+
+                }
+                else
+                {
+                    buttonStart.setText("Start");
+                    countDownTV.setText("Process Stopped");
+                    startLogging=false;
+                }
+            }
+        });
     }
 
     public void writeData(long time, float x, float y, float z)
     {
 
-        System.out.println(time+" "+x+" "+y+" "+z);
+        String acc = (time-startTime)/1000000000.0 + " " + x + " " + y + " " + z+"\n";
+
+//        System.out.println(acc);
+        if (startLogging)
+        {
+            if (timeStarted=false)
+            {
+                timeStarted=true;
+                startTime=time;
+
+            }
+            try
+            {
+                bos.write(acc.getBytes());
+
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+
+
     }
 
     /**
@@ -37,7 +199,46 @@ public class MainActivity extends AppCompatActivity
      * which is packaged with this application.
      */
     public native String stringFromJNI();
-    public  native void sensorValue();
+
+    public native void sensorValue();
+
     public native void startSensorPrint();
+
     public native void stopSensorPrint();
+
+    @Override
+    protected void onDestroy()
+    {
+
+        super.onDestroy();
+        try
+        {
+            bos.close();
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Checks if the app has permission to write to device storage
+     *
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
 }
