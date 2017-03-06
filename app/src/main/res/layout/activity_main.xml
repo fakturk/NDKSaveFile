@@ -29,30 +29,58 @@
         android:id="@+id/countDownTV"
         android:textSize="18sp"/>
 
-    <TextView
-        android:text="0 Degree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sample_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="85dp"
-        android:id="@+id/degreeTV"
-        android:textSize="18sp"/>
-
-    <Button
-        android:text="+10 Degree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sample_text"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_alignStart="@+id/buttonStart"
-        android:layout_marginTop="24dp"
-        android:id="@+id/buttonPlus"/>
+        android:layout_alignEnd="@+id/buttonStart">
 
-    <Button
-        android:text="- 10 Degree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonMinus"
-        android:layout_below="@+id/degreeTV"
-        android:layout_alignStart="@+id/buttonPlus"/>
+        <Button
+            android:text="+10 Degree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sample_text"
+            android:layout_alignStart="@+id/buttonStart"
+            android:layout_marginTop="24dp"
+            android:id="@+id/buttonPlus"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/buttonStart"
+            android:layout_alignBottom="@+id/buttonPlus"
+            android:layout_alignEnd="@+id/buttonPlus">
+
+            <TextView
+                android:text="Degree"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/sample_text"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/degreeTV"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:inputType="textPersonName"
+                android:text="0"
+                android:ems="10"
+                android:id="@+id/editText"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:text="- 10 Degree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonMinus"
+            android:layout_below="@+id/degreeTV"
+            android:layout_alignStart="@+id/buttonPlus" />
+
+    </LinearLayout>
+
 </RelativeLayout>

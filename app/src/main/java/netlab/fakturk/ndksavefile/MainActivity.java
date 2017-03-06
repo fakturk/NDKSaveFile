@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         countDownTV = (TextView) findViewById(R.id.countDownTV);
 
         SharedPreferences settings = getSharedPreferences("netlab.fakturk.degree", 0);
-        int degree = settings.getInt("degree")
+//        int degree = settings.getInt("degree")
 
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
