@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    File sd = Environment.getExternalStorageDirectory();
-    Calendar c = Calendar.getInstance();
-    String path = sd + "/" + "SensorData" + c.getTime() + ".xml";
-    String mDestXmlFilename = path;
-    File myFile = new File(mDestXmlFilename);
+    File sd;
+    Calendar c ;
+    String path ;
+    String mDestXmlFilename ;
+    File myFile ;
     BufferedOutputStream bos;
     Button buttonStart;
     Button buttonPlus;
@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity
 //        TextView tv = (TextView) findViewById(R.id.sample_text);
 //        tv.setText(stringFromJNI());
 
+         sd = Environment.getExternalStorageDirectory();
+         c = Calendar.getInstance();
+         path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
+         mDestXmlFilename = path;
+         myFile = new File(mDestXmlFilename);
+
         FileOutputStream fOut = null;
         verifyStoragePermissions(this);
 
@@ -115,6 +121,9 @@ public class MainActivity extends AppCompatActivity
             {
                 int d = Integer.parseInt( editTextDegree.getText().toString());
                 d += 10;
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("degree", d);
+                editor.commit();
                 editTextDegree.setText(String.valueOf(d));
             }
         });
@@ -126,6 +135,9 @@ public class MainActivity extends AppCompatActivity
             {
                 int d = Integer.parseInt( editTextDegree.getText().toString());
                 d -= 10;
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("degree", d);
+                editor.commit();
                 editTextDegree.setText(String.valueOf(d));
             }
         });
