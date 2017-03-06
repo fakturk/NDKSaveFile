@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.BufferedOutputStream;
@@ -46,10 +47,12 @@ public class MainActivity extends AppCompatActivity
     Button buttonMinus;
     TextView degreeTV;
     TextView countDownTV;
+    EditText editTextDegree;
     boolean startLogging=false;
     boolean timeStarted=false;
     long startTime=0;
     int repeatNumber=1;
+    int degree=0;
 
 
 
@@ -65,13 +68,16 @@ public class MainActivity extends AppCompatActivity
         buttonPlus = (Button) findViewById(R.id.buttonPlus);
         degreeTV = (TextView) findViewById(R.id.degreeTV);
         countDownTV = (TextView) findViewById(R.id.countDownTV);
+        editTextDegree = (EditText) findViewById(R.id.editTextDegree);
 
-        SharedPreferences settings = getSharedPreferences("netlab.fakturk.degree", 0);
-//        int degree = settings.getInt("degree")
+        final SharedPreferences settings = getSharedPreferences("netlab.fakturk.degree", 0);
+//        int defaultValue = getResources().getInteger(R.string.degree_default);
+        degree = settings.getInt("degree",0);
+        editTextDegree.setText(String.valueOf(degree));
 
         // Example of a call to a native method
-        TextView tv = (TextView) findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+//        TextView tv = (TextView) findViewById(R.id.sample_text);
+//        tv.setText(stringFromJNI());
 
         FileOutputStream fOut = null;
         verifyStoragePermissions(this);
@@ -91,6 +97,38 @@ public class MainActivity extends AppCompatActivity
         }
 
         sensorValue();
+        editTextDegree.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                degree = Integer.parseInt(editTextDegree.getText().toString());
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("degree", degree);
+                editor.commit();
+            }
+        });
+        buttonPlus.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                int d = Integer.parseInt( editTextDegree.getText().toString());
+                d += 10;
+                editTextDegree.setText(String.valueOf(d));
+            }
+        });
+
+        buttonMinus.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                int d = Integer.parseInt( editTextDegree.getText().toString());
+                d -= 10;
+                editTextDegree.setText(String.valueOf(d));
+            }
+        });
 
         buttonStart.setOnClickListener(new View.OnClickListener()
         {

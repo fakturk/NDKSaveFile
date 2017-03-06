@@ -31,10 +31,9 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignStart="@+id/buttonStart"
-        android:layout_alignEnd="@+id/buttonStart">
+        android:layout_width="120dp">
 
         <Button
             android:text="+10 Degree"
@@ -47,39 +46,34 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignStart="@+id/buttonStart"
-            android:layout_alignBottom="@+id/buttonPlus"
-            android:layout_alignEnd="@+id/buttonPlus">
-
-            <TextView
-                android:text="Degree"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/sample_text"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/degreeTV"
-                android:textSize="18sp" />
+            android:layout_alignBottom="@+id/buttonMinus">
 
             <EditText
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_width="37dp"
                 android:inputType="textPersonName"
                 android:text="0"
                 android:ems="10"
-                android:id="@+id/editText"
-                />
+                android:id="@+id/editTextDegree" />
+
+            <TextView
+                android:text="Degree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/degreeTV"
+                android:textSize="18sp" />
+
 
         </LinearLayout>
 
         <Button
             android:text="- 10 Degree"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonMinus"
-            android:layout_below="@+id/degreeTV"
-            android:layout_alignStart="@+id/buttonPlus" />
+            android:id="@+id/buttonMinus"/>
 
     </LinearLayout>
 

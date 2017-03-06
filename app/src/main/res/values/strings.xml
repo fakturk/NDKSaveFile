@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NDKSaveFile</string>
+    <string name="degree_default">0</string>
 </resources>
