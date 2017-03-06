@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity
                 degree = Integer.parseInt(editTextDegree.getText().toString());
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt("degree", degree);
+                path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
                 editor.commit();
             }
         });
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity
                 d += 10;
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt("degree", d);
+                path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
                 editor.commit();
                 editTextDegree.setText(String.valueOf(d));
             }
@@ -137,6 +139,7 @@ public class MainActivity extends AppCompatActivity
                 d -= 10;
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt("degree", d);
+                path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
                 editor.commit();
                 editTextDegree.setText(String.valueOf(d));
             }
