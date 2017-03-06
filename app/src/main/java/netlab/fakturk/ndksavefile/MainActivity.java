@@ -2,6 +2,7 @@ package netlab.fakturk.ndksavefile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity
     File myFile = new File(mDestXmlFilename);
     BufferedOutputStream bos;
     Button buttonStart;
+    Button buttonPlus;
+    Button buttonMinus;
+    TextView degreeTV;
     TextView countDownTV;
     boolean startLogging=false;
     boolean timeStarted=false;
@@ -57,7 +61,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buttonStart = (Button) findViewById(R.id.buttonStart);
+        buttonMinus = (Button) findViewById(R.id.buttonMinus);
+        buttonPlus = (Button) findViewById(R.id.buttonPlus);
+        degreeTV = (TextView) findViewById(R.id.degreeTV);
         countDownTV = (TextView) findViewById(R.id.countDownTV);
+
+        SharedPreferences settings = getSharedPreferences("netlab.fakturk.degree", 0);
+        int degree = settings.getInt("degree")
 
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);

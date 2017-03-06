@@ -11,12 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="netlab.fakturk.ndksavefile.MainActivity">
 
-    <TextView
-        android:id="@+id/sample_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"/>
-
     <Button
         android:text="Start"
         android:layout_width="wrap_content"
@@ -34,4 +28,31 @@
         android:layout_marginTop="91dp"
         android:id="@+id/countDownTV"
         android:textSize="18sp"/>
+
+    <TextView
+        android:text="0 Degree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sample_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:id="@+id/degreeTV"
+        android:textSize="18sp"/>
+
+    <Button
+        android:text="+10 Degree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sample_text"
+        android:layout_alignStart="@+id/buttonStart"
+        android:layout_marginTop="24dp"
+        android:id="@+id/buttonPlus"/>
+
+    <Button
+        android:text="- 10 Degree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonMinus"
+        android:layout_below="@+id/degreeTV"
+        android:layout_alignStart="@+id/buttonPlus"/>
 </RelativeLayout>
