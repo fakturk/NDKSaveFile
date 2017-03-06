@@ -80,27 +80,27 @@ public class MainActivity extends AppCompatActivity
 //        tv.setText(stringFromJNI());
 
          sd = Environment.getExternalStorageDirectory();
-         c = Calendar.getInstance();
-         path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
-         mDestXmlFilename = path;
-         myFile = new File(mDestXmlFilename);
-
-        FileOutputStream fOut = null;
-        verifyStoragePermissions(this);
-
-        try
-        {
-            myFile.createNewFile();
-            fOut = new FileOutputStream(myFile);
-            bos = new BufferedOutputStream(fOut);
-
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+//         c = Calendar.getInstance();
+//         path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
+//         mDestXmlFilename = path;
+//         myFile = new File(mDestXmlFilename);
+//
+//        FileOutputStream fOut = null;
+//        verifyStoragePermissions(this);
+//
+//        try
+//        {
+//            myFile.createNewFile();
+//            fOut = new FileOutputStream(myFile);
+//            bos = new BufferedOutputStream(fOut);
+//
+//        } catch (FileNotFoundException e)
+//        {
+//            e.printStackTrace();
+//        } catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
 
         sensorValue();
         editTextDegree.setOnClickListener(new View.OnClickListener()
@@ -111,7 +111,8 @@ public class MainActivity extends AppCompatActivity
                 degree = Integer.parseInt(editTextDegree.getText().toString());
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt("degree", degree);
-                path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
+//                c = Calendar.getInstance();
+//                path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
                 editor.commit();
             }
         });
@@ -124,7 +125,8 @@ public class MainActivity extends AppCompatActivity
                 d += 10;
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt("degree", d);
-                path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
+//                c = Calendar.getInstance();
+//                path = sd + "/" + d+ "_Degree_" +c.getTime() + ".xml";
                 editor.commit();
                 editTextDegree.setText(String.valueOf(d));
             }
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity
                 d -= 10;
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt("degree", d);
-                path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
+//                path = sd + "/" + d+ "_Degree_" +c.getTime() + ".xml";
                 editor.commit();
                 editTextDegree.setText(String.valueOf(d));
             }
@@ -165,9 +167,10 @@ public class MainActivity extends AppCompatActivity
                         public void onFinish()
                         {
                             countDownTV.setText("Processing");
+                            setPath(settings, repeatNumber);
                             startLogging=true;
                             timeStarted=false;
-                            new CountDownTimer(10000,1000)
+                            new CountDownTimer(1000,1000)
                             {
                                 @Override
                                 public void onTick(long millisUntilFinished)
@@ -179,7 +182,6 @@ public class MainActivity extends AppCompatActivity
                                 public void onFinish()
                                 {
 
-
                                     try
                                     {
                                         bos.close();
@@ -189,29 +191,15 @@ public class MainActivity extends AppCompatActivity
                                         e.printStackTrace();
                                     }
 
-                                    c = Calendar.getInstance();
-                                     path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
-                                     mDestXmlFilename = path;
-                                     myFile = new File(mDestXmlFilename);
-                                    FileOutputStream fOut = null;
-                                    try
-                                    {
-                                        myFile.createNewFile();
-                                        fOut = new FileOutputStream(myFile);
-                                        bos = new BufferedOutputStream(fOut);
 
-                                    } catch (FileNotFoundException e)
-                                    {
-                                        e.printStackTrace();
-                                    } catch (IOException e)
-                                    {
-                                        e.printStackTrace();
-                                    }
 
-                                    if(repeatNumber<10)
+
+
+                                    if(repeatNumber<1000)
                                     {
                                         repeatNumber++;
                                         timeStarted=false;
+                                        setPath(settings, repeatNumber);
                                         start();
                                     }
                                     else
@@ -220,7 +208,9 @@ public class MainActivity extends AppCompatActivity
                                         startLogging=false;
                                         countDownTV.setText("Process Finished");
                                         buttonStart.setText("Start");
+                                        repeatNumber=1;
                                     }
+
 
                                 }
 
@@ -240,11 +230,43 @@ public class MainActivity extends AppCompatActivity
                     buttonStart.setText("Start");
                     countDownTV.setText("Process Stopped");
                     startLogging=false;
+
+                    try
+                    {
+                        bos.close();
+
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
     }
 
+    void setPath(SharedPreferences settings, int repeatNumber)
+    {
+        c = Calendar.getInstance();
+        degree = settings.getInt("degree",0);
+        System.out.println(degree);
+        path = sd + "/" + degree+ "_Degree_" +repeatNumber+"_Repeat_"+c.getTime() + ".xml";
+        mDestXmlFilename = path;
+        myFile = new File(mDestXmlFilename);
+        FileOutputStream fOut = null;
+        try
+        {
+            myFile.createNewFile();
+            fOut = new FileOutputStream(myFile);
+            bos = new BufferedOutputStream(fOut);
+
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
     public void writeData(long time, float x, float y, float z)
     {
         float t = (time-startTime)/1000000000.0f;
