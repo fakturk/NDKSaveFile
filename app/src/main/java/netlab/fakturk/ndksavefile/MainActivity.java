@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                                     }
 
                                     c = Calendar.getInstance();
-                                     path = sd + "/" + "SensorData" + c.getTime() + ".xml";
+                                     path = sd + "/" + degree+ "_Degree_" +c.getTime() + ".xml";
                                      mDestXmlFilename = path;
                                      myFile = new File(mDestXmlFilename);
                                     FileOutputStream fOut = null;
