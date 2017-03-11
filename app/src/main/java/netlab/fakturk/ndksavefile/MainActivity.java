@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonMinus = (Button) findViewById(R.id.buttonMinus);
         buttonPlus = (Button) findViewById(R.id.buttonPlus);
@@ -317,14 +319,14 @@ public class MainActivity extends AppCompatActivity
     {
 
         super.onDestroy();
-        try
-        {
-            bos.close();
-
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+//        try
+//        {
+//            bos.close();
+//
+//        } catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
     }
 
     /**
